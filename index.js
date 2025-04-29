@@ -37,11 +37,12 @@ app.post('/api/submit-form', async (req, res) => {
     courses = [],
     colleges = [],
     cities = [],
-    category
+    category,
+    remarks = "" // 1. Add remarks with fallback
   } = req.body;
 
   try {
-    // 4a) Send welcome email to student
+    // 2. Send welcome email to student
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -60,12 +61,13 @@ app.post('/api/submit-form', async (req, res) => {
           <li><strong>Colleges:</strong> ${colleges.join(', ')}</li>
           <li><strong>Cities:</strong> ${cities.join(', ')}</li>
           <li><strong>Category:</strong> ${category}</li>
+          <li><strong>Remarks:</strong> ${remarks || 'None provided'}</li>
         </ul>
         <p>If you have any questions, feel free to reach out.</p>
       `
     });
 
-    // 4b) Send a notification email to you
+    // 3. Send a notification email to admin (you)
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -78,10 +80,11 @@ app.post('/api/submit-form', async (req, res) => {
         <p><strong>Colleges:</strong> ${colleges.join(', ')}</p>
         <p><strong>Cities:</strong> ${cities.join(', ')}</p>
         <p><strong>Category:</strong> ${category}</p>
+        <p><strong>Remarks:</strong> ${remarks || 'None provided'}</p>
       `
     });
 
-    // 4c) Respond to the frontend
+    // 4. Respond to frontend
     res.status(200).json({ message: 'Form submitted and emails sent!' });
 
   } catch (err) {
@@ -89,6 +92,7 @@ app.post('/api/submit-form', async (req, res) => {
     res.status(500).json({ error: 'Server error sending emails' });
   }
 });
+
 
 // 5) Start server
 const PORT = process.env.PORT || 3001;
