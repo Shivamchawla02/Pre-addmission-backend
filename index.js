@@ -11,11 +11,13 @@ import PreAdmission from './models/PreAdmission.js';
 const app = express();
 
 // ✅ Fix CORS to allow only your frontend
-app.use(cors({
-  origin: 'https://servocci.in',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: 'https://servocci.in',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   credentials: true
+// }));
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
