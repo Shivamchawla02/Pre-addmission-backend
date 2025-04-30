@@ -1,4 +1,4 @@
-import PreAdmission from '../models/PreAdmission';
+import PreAdmission from '../models/PreAdmission.js';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({

@@ -1,5 +1,5 @@
 import express from 'express';
-import { submitForm, getPreAdmissions } from '../controllers/preAdmissionController';
+import { submitForm, getPreAdmissions } from '../controllers/preAdmissionController.js';
 
 const router = express.Router();
 
