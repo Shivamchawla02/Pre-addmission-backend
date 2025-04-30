@@ -61,6 +61,10 @@ export const submitForm = async (req, res) => {
       html: `
         <h3>New Submission from ${fullName}</h3>
         <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Father’s Name:</strong> ${fatherName}</p>
+        <p><strong>Mother’s Name:</strong> ${motherName}</p>
+        <p><strong>DOB:</strong> ${dob}</p>
+        <p><strong>Gender:</strong> ${gender}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Courses:</strong> ${courses.join(', ')}</p>
         <p><strong>Colleges:</strong> ${colleges.join(', ')}</p>
