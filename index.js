@@ -1,14 +1,23 @@
-require('dotenv').config();             // 1) load .env
+require('dotenv').config(); // 1) Load .env
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const PreAdmission = require('./models/PreAdmission');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// 2) Configure the Gmail transporter with your App Password
+// 2) Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('📦 Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// 3) Configure Gmail transporter
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -19,12 +28,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// 3) Root route so GET / doesn’t 404
+// 4) Root route
 app.get('/', (req, res) => {
   res.send('🎓 Pre-Admission API is running');
 });
 
-// 4) Form submission endpoint
+// 5) Form submission endpoint
 app.post('/api/submit-form', async (req, res) => {
   const {
     fullName,
@@ -38,11 +47,11 @@ app.post('/api/submit-form', async (req, res) => {
     colleges = [],
     cities = [],
     category,
-    remarks = "" // 1. Add remarks with fallback
+    remarks = ""
   } = req.body;
 
   try {
-    // 2. Send welcome email to student
+    // 1. Send welcome email
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -67,7 +76,7 @@ app.post('/api/submit-form', async (req, res) => {
       `
     });
 
-    // 3. Send a notification email to admin (you)
+    // 2. Send admin notification
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -84,17 +93,44 @@ app.post('/api/submit-form', async (req, res) => {
       `
     });
 
+    // 3. Save to MongoDB
+    const newForm = new PreAdmission({
+      fullName,
+      fatherName,
+      motherName,
+      dob,
+      gender,
+      phone,
+      email,
+      courses,
+      colleges,
+      cities,
+      category,
+      remarks
+    });
+    await newForm.save();
+
     // 4. Respond to frontend
-    res.status(200).json({ message: 'Form submitted and emails sent!' });
+    res.status(200).json({ message: 'Form submitted, emails sent & saved to DB!' });
 
   } catch (err) {
     console.error('Error in /api/submit-form:', err);
-    res.status(500).json({ error: 'Server error sending emails' });
+    res.status(500).json({ error: 'Server error sending emails or saving data' });
   }
 });
 
+// 6) View all pre-admission submissions
+app.get('/api/preadmissions', async (req, res) => {
+  try {
+    const forms = await PreAdmission.find().sort({ createdAt: -1 });
+    res.status(200).json(forms);
+  } catch (err) {
+    console.error('Error fetching pre-admissions:', err);
+    res.status(500).json({ error: 'Error fetching data' });
+  }
+});
 
-// 5) Start server
+// 7) Start server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
