@@ -9,10 +9,17 @@ import preAdmissionRoutes from './routes/preAdmissionRoutes.js';
 import PreAdmission from './models/PreAdmission.js';
 
 const app = express();
-app.use(cors());
+
+// ✅ Fix CORS to allow only your frontend
+app.use(cors({
+  origin: 'https://servocci.in',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 
-// 2) Connect to MongoDB
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -22,12 +29,12 @@ mongoose.connect(process.env.MONGO_URI, {
 // Use routes
 app.use('/api', preAdmissionRoutes);
 
-// 4) Root route
+// Root route
 app.get('/', (req, res) => {
   res.send('🎓 Pre-Admission API is running');
 });
 
-// 7) Start server
+// Start server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
