@@ -113,17 +113,18 @@ export const getPreAdmissions = async (req, res) => {
 export const getPreAdmissionById = async (req, res) => {
   try {
     const { id } = req.params;
-    const student = await Preadmission.findById(id);
+    const student = await PreAdmission.findById(id);  // Corrected 'Preadmission' to 'PreAdmission'
     if (!student) {
-      return res.status(404).json({ message: 'Preadmission student not found' });
+      return res.status(404).json({ message: 'Pre-admission student not found' });  // Corrected message
     }
     res.json(student);
   } catch (err) {
-    console.error('Error fetching preadmission by ID:', err);
+    console.error('Error fetching pre-admission by ID:', err);
     if (err.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid student ID format' });
     }
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
