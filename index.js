@@ -9,13 +9,24 @@ import preAdmissionRoutes from './routes/preAdmissionRoutes.js';
 
 const app = express();
 
-// ✅ CORS setup
+// ✅ CORS setup: allow multiple trusted origins
+const allowedOrigins = [
+  'https://servocci.in',
+  'https://servocci-pre-addmission.vercel.app'
+];
 app.use(cors({
-  origin: 'https://servocci.in',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // Allow non-browser requests
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS policy: origin ${origin} not allowed`));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 
+// Parse JSON bodies
 app.use(bodyParser.json());
 
 // ✅ Mount internal API routes
