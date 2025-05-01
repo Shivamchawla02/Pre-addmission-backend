@@ -18,9 +18,6 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-// ✅ Mount proxy routes
-app.use('/api', proxyPreadmissionRoute);
-
 // ✅ Mount internal API routes
 app.use('/api', preAdmissionRoutes);
 
