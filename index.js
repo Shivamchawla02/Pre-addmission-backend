@@ -7,7 +7,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import preAdmissionRoutes from './routes/preAdmissionRoutes.js';
 import PreAdmission from './models/PreAdmission.js';
-import proxyPreadmissionRoute from './routes/preAdmissionProxy.js';
+import proxyPreadmissionRoute from './routes/preAdmissionProxy.js'
 
 const app = express();
 
