@@ -7,19 +7,20 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import preAdmissionRoutes from './routes/preAdmissionRoutes.js';
 import PreAdmission from './models/PreAdmission.js';
+import proxyPreadmissionRoute from './routes/preAdmissionProxy.js';
 
 const app = express();
 
 // ✅ Fix CORS to allow only your frontend
-// app.use(cors({
-//   origin: 'https://servocci.in',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   credentials: true
-// }));
-
-app.use(cors());
+app.use(cors({
+  origin: 'https://servocci.in',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.use(bodyParser.json());
+
+app.use('/api', proxyPreadmissionRoute);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
