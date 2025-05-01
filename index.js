@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import preAdmissionRoutes from './routes/preAdmissionRoutes.js';
-import proxyPreadmissionRoute from './routes/preAdmissionProxy.js';
 
 const app = express();
 
