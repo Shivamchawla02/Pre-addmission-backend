@@ -23,7 +23,9 @@ export const submitForm = async (req, res) => {
     courses = [],
     colleges = [],
     cities = [],
-    category,
+    // category,                // <-- Kept for reference
+    schoolName,                // <-- Added
+    skills = [],               // <-- Added
     remarks = "",
   } = req.body;
 
@@ -44,9 +46,10 @@ export const submitForm = async (req, res) => {
           <li><strong>Gender:</strong> ${gender}</li>
           <li><strong>Phone:</strong> ${phone}</li>
           <li><strong>Courses:</strong> ${courses.join(', ')}</li>
+          <li><strong>Skills:</strong> ${skills.join(', ')}</li> <!-- Added -->
           <li><strong>Colleges:</strong> ${colleges.join(', ')}</li>
           <li><strong>Cities:</strong> ${cities.join(', ')}</li>
-          <li><strong>Category:</strong> ${category}</li>
+          <li><strong>School Name:</strong> ${schoolName}</li> <!-- Changed -->
           <li><strong>Remarks:</strong> ${remarks || 'None provided'}</li>
         </ul>
         <p>If you have any questions, feel free to reach out.</p>
@@ -67,9 +70,10 @@ export const submitForm = async (req, res) => {
         <p><strong>Gender:</strong> ${gender}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Courses:</strong> ${courses.join(', ')}</p>
+        <p><strong>Skills:</strong> ${skills.join(', ')}</p> <!-- Added -->
         <p><strong>Colleges:</strong> ${colleges.join(', ')}</p>
         <p><strong>Cities:</strong> ${cities.join(', ')}</p>
-        <p><strong>Category:</strong> ${category}</p>
+        <p><strong>School Name:</strong> ${schoolName}</p> <!-- Changed -->
         <p><strong>Remarks:</strong> ${remarks || 'None provided'}</p>
       `,
     });
@@ -84,9 +88,10 @@ export const submitForm = async (req, res) => {
       phone,
       email,
       courses,
+      skills,               // <-- Added
       colleges,
       cities,
-      category,
+      schoolName,           // <-- Changed
       remarks,
     });
 
@@ -126,5 +131,3 @@ export const getPreAdmissionById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-

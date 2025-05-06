@@ -9,9 +9,10 @@ const preAdmissionSchema = new mongoose.Schema({
   email: String,
   phone: String,
   courses: [String],
+  skills: [String],        // <-- Added skills
   colleges: [String],
   cities: [String],
-  category: String,
+  schoolName: String,      // <-- Renamed from 'category' to 'schoolName'
   remarks: String,
 }, { timestamps: true });
 
